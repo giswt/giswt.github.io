@@ -37,6 +37,7 @@ On the Product Explorer pane, click on the subset data to highlight then go to F
 All bands such as the Band 1 (resolution: 60m) will be resampled to 10m in the first step. So this may not give you what you need, if the goal is to stack all the bands as-is.
   
 
-引用文献：[Step Forum](https://forum.step.esa.int/t/exporting-rgb-image-as-a-geotiff/1071) 
-         [StackExchange](https://gis.stackexchange.com/questions/346322/export-sentinal-2-tiff-image-from-snap-with-all-the-bands-intact) 
+引用文献：  
+[Step Forum](https://forum.step.esa.int/t/exporting-rgb-image-as-a-geotiff/1071)   
+[StackExchange](https://gis.stackexchange.com/questions/346322/export-sentinal-2-tiff-image-from-snap-with-all-the-bands-intact) 
          
