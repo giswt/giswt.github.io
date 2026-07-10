@@ -39,7 +39,7 @@ Flood Hub UI 是Google洪水预报系统的可视化层，负责展示。
 Google 采用的基本是公开的数据集。 天气预报包括了ECMWF、NOAA和其他全球天气预报产品，用于提供未来降雨预测。 DEM高程数据，用于计算河流的河谷、坡度和河流流向。卫星影像用于地表水体提取，进行历史洪水提取与洪水预报验证。河流网络数据主要使用了HydroSHEDS。还使用了各国公开的水文站点数据。
 
 ###  OpenHydroNet
-OpenHydroNet 是 Google 开源的 AI 水文预测模型，对应于 Google Flood Hub 的水文模型层（Hydrologic Layer），承担洪水预报链条中降雨–径流模拟的核心任务。该模型融合多源气象预报和流域静态属性等信息，预测未来河流流量（Discharge），为后续水位计算、淹没范围模拟以及洪水预警提供关键的水文边界条件。需要指出的是，OpenHydroNet 仅实现了洪水预报系统中的水文预测模块，并不包含水位转换、淹没模拟、预警发布等完整洪水预警系统的其他组成部分。
+OpenHydroNet 是 Google 开源的 AI 水文预测模型，对应于 Google Flood Hub 的水文模型层，承担洪水预报链条中降雨–径流模拟的核心任务。该模型融合多源气象预报和流域静态属性等信息，预测未来河流流量，为后续水位计算、淹没范围模拟以及洪水预警提供关键的水文边界条件。需要指出的是，OpenHydroNet 仅实现了洪水预报系统中的水文预测模块，并不包含水位转换、淹没模拟、预警发布等完整洪水预警系统的其他组成部分。
 
 **根据 Google 官方说明，当前 Flood Hub 水文模型采用集总流域（Lumped Catchment）建模方式，直接预测目标河段流量，而不显式模拟河网中的下游汇流过程。因此，该模型不进行基于河网拓扑的显式汇流计算或图结构信息传播。但官方并未说明各小流域之间完全独立，也未否认模型输入中可能包含上游或区域尺度的信息。**
 
@@ -49,29 +49,23 @@ OpenHydroNet 是 Google 开源的 AI 水文预测模型，对应于 Google Flood
 ```
 # 将代码下载到本地
 git clone https://github.com/google-research/flood-forecasting.git
-
 cd flood-forecasting-main
-
 #创建虚拟Python环境
 conda env create -f environments/conda.yml
-
 #激活虚拟环境
 conda activate googlehydrology
-
 #重要的步骤，因为后面修改文件后不需要再安装
 pip install -e .
-
 ```
   
 ![wmts2](http://www.spatial.pro/img/D20260710_01.png)    
 
 
-# 测试官方Demo
+#### 测试官方Demo
 
 本人使用的操作系统环境：<font size=3 color=Red>Ubuntu 22.04.5 LTS</font>   
 下载的代码中包含了官方的jupyter notebook 文件，位于目录flood-forecasting-main\flood-forecasting-main\tutorial下的OpenHydroNet_Tutorial.ipynb文件。
 在googlehydrology虚拟环境中打开jupyter notebook，加载OpenHydroNet_Tutorial.ipynb，然后依次运行代码。    
-
 ![wmts2](http://www.spatial.pro/img/D20260710_02.png)  
 注意：一定要运行以下的代码，否则输入结果会不正常     
 %matplotlib inline  以内嵌方式显示图表  
@@ -85,8 +79,6 @@ pip install -e .
 ![wmts2](http://www.spatial.pro/img/D20260710_07.png)   
 使用的是CAMELS数据集的一部分，以下是QGIS中带影像底图的数据集范围。    
 ![wmts2](http://www.spatial.pro/img/D20260710_07_01.png)  
-
-
 以下是基础模型的各流域评估结果，后续将使用了13235000的KGE对比微调前后的结果。  
 ![wmts2](http://www.spatial.pro/img/D20260710_08.png) 
 
@@ -94,10 +86,9 @@ pip install -e .
 ![wmts2](http://www.spatial.pro/img/D20260710_09.png)   
 微调后的模型结果，明显优于基础模型的结果。  
 ![wmts2](http://www.spatial.pro/img/D20260710_10.png)   
-这个是13235000流域实际观测值、基础模型预测值和微调后的模型预测值间的对比，从峰现时间和洪水峰值流量上，微调后的模型  
+这个是13235000流域实际观测值、基础模型预测值和微调后的模型预测值间的对比，从峰现时间和洪水峰值流量上，微调后的模型要优于基础模型。  
 ![wmts2](http://www.spatial.pro/img/D20260710_11.png)   
-流域面积是描述流域特征的重要静态属性之一。流域面积影响许多重要水文过程，比如：降雨汇流时间；径流形成过程；洪峰传播速度；流量响应尺度。因此，流域面积不仅是一个简单的几何参数，而是影响模型学习流域水文行为的重要物理特征。如果微调目标流域的面积明显偏离训练流域面积的主要分布范围（如直方图中显示的情况），则说明：
-基础模型可能没有学习到适用于该尺度流域的有效特征表示。    
+流域面积是描述流域特征的重要静态属性之一。流域面积影响许多重要水文过程，比如：降雨汇流时间、径流形成过程、洪峰传播速度、流量响应尺度。因此，流域面积不仅是一个简单的几何参数，而是影响模型学习流域水文行为的重要物理特征。如果微调目标流域的面积明显偏离训练流域面积的主要分布范围（如下图），则说明基础模型可能没有学习到适用于该尺度流域的有效特征表示。    
  流域面积分布分析的意义在于判断目标流域是否偏离预训练数据的尺度范围。如果存在明显尺度差异，基础模型中的静态属性编码层（static_attributes_fc）可能无法生成适合该流域的特征表示，因此通过针对该层进行微调，可以在保持原有水文预测能力的同时，提高模型对目标流域的适应性。  
 ![wmts2](http://www.spatial.pro/img/D20260710_12.png)     
    
