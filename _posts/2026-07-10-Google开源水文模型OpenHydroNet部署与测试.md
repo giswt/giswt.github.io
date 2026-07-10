@@ -4,7 +4,7 @@ title:     Google开源水文模型OpenHydroNet部署与测试
 subtitle:   
 date:       2026-07-08
 author:     WT
-header-img: img/post-bg-flooding.jpg.jpg
+header-img: img/post-bg-flooding.jpg
 catalog: true
 tags:
     - Google
