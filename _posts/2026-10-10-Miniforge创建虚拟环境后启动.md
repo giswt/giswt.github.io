@@ -56,4 +56,10 @@ M:\LLP\after20260909\EOO-Web-Windows-V6.1\backend\eoo_engine.py:45: UserWarning:
 127.0.0.1 - - [10/Oct/2026 14:05:26] "GET /api/tasks HTTP/1.1" 200 -
 ```  
 
-![wmts2](http://www.spatial.pro/img/D20261010_02.png)       
+![wmts2](http://www.spatial.pro/img/D20261010_02.png)   
+
+<font size=3 color=Red>号外</font>    
+``` 
+#p 是 --prefix 的缩写，意思是：直接指定 Conda 虚拟环境安装到哪个完整目录
+conda create -p D:\python_envs\conda_envs\waterflow_compare python=3.12  
+```  
